@@ -7,6 +7,7 @@ import androidx.health.connect.client.permission.HealthPermission
 import androidx.health.connect.client.records.StepsRecord
 import kotlinx.coroutines.runBlocking
 import java.time.Instant
+import java.time.ZoneId
 import java.time.ZoneOffset
 
 class HealthConnect {
@@ -27,12 +28,14 @@ class HealthConnect {
             val granted = healthConnectClient.permissionController.getGrantedPermissions()
             if (granted.containsAll(PERMISSIONS)) {
                 try {
+                    val userTimeZone: ZoneId = ZoneId.systemDefault()
+                    val userZoneOffset: ZoneOffset = userTimeZone.rules.getOffset(Instant.ofEpochMilli(startTime))
                     val stepsRecord = StepsRecord(
                             count = steps.toLong(),
                             startTime = Instant.ofEpochMilli(startTime),
                             endTime = Instant.ofEpochMilli(endTime),
-                            startZoneOffset = ZoneOffset.ofHours(2),
-                            endZoneOffset = ZoneOffset.ofHours(2)
+                            startZoneOffset = userZoneOffset,
+                            endZoneOffset = userZoneOffset
 
                     )
                     healthConnectClient.insertRecords(listOf(stepsRecord))

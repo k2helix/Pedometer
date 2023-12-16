@@ -32,6 +32,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.text.NumberFormat;
 import java.util.Date;
@@ -43,6 +46,10 @@ import de.j4velin.pedometer.util.API26Wrapper;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 import de.j4velin.pedometer.widget.WidgetUpdateService;
+import kotlin.Unit;
+import kotlin.coroutines.Continuation;
+import kotlin.coroutines.CoroutineContext;
+import kotlin.coroutines.EmptyCoroutineContext;
 
 /**
  * Background service which keeps the step-sensor listener alive to always get
@@ -105,9 +112,16 @@ public class SensorListener extends Service implements SensorEventListener {
             }
             db.saveCurrentSteps(steps);
             db.close();
+
+            if (steps - lastSaveSteps < 10000) {
+                HealthConnect healthConnect = new HealthConnect();
+                healthConnect.saveStepsToHealthConnect(steps - lastSaveSteps + 1, lastSaveTime, System.currentTimeMillis(), this);
+            }
+
             lastSaveSteps = steps;
             lastSaveTime = System.currentTimeMillis();
             showNotification(); // update notification
+
             WidgetUpdateService.enqueueUpdate(this);
             return true;
         } else {
@@ -169,7 +183,7 @@ public class SensorListener extends Service implements SensorEventListener {
         // Restart service in 500 ms
         ((AlarmManager) getSystemService(Context.ALARM_SERVICE))
                 .set(AlarmManager.RTC, System.currentTimeMillis() + 500, PendingIntent
-                        .getService(this, 3, new Intent(this, SensorListener.class), 0));
+                        .getService(this, 3, new Intent(this, SensorListener.class), PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
     @Override

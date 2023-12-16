@@ -8,16 +8,18 @@ buildscript {
         jcenter()
     }
     dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.21"
         if (rootProject.ext.has("gradle_classpath")) {
             classpath rootProject.ext.gradle_classpath
         } else {
             logger.warn('classpath not found in rootProject')
-            classpath 'com.android.tools.build:gradle:3.0.1'
+            classpath 'com.android.tools.build:gradle:7.0.0'
         }
     }
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
 
@@ -26,13 +28,13 @@ android {
         buildToolsVersion rootProject.ext.buildToolsVersion
     } else {
         logger.warn('compileSdkVersion not found in rootProject')
-        compileSdkVersion = 27
+        compileSdkVersion = 34
         buildToolsVersion = "27.0.3"
     }
 
     defaultConfig {
-        applicationId "de.j4velin.pedometer"
-        minSdkVersion 19
+        applicationId "de.j4velin.pedometer.new"
+        minSdkVersion 26
     }
 
     signingConfigs {
@@ -82,10 +84,11 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.github.j4velin.colorpicker:colorpicker:1.20.6'
     implementation 'com.github.j4velin.EazeGraph:EazeGraph:1.0.3'
     implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
+    implementation "androidx.health.connect:connect-client:1.1.0-alpha06"
     playImplementation 'com.google.android.gms:play-services-fitness:15.0.1'
     playImplementation 'com.google.android.gms:play-services-games:15.0.1'
     playImplementation 'com.google.android.gms:play-services-identity:15.0.1'

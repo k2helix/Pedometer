@@ -127,7 +127,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         if (Build.VERSION.SDK_INT >= 26) { // notification settings might have changed
             API26Wrapper.startForegroundService(getActivity(),
-                    new Intent(getActivity(), SensorListener.class));
+                    new Intent(getContext(), SensorListener.class));
         }
     }
 
@@ -170,7 +170,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                         prefs.edit().putInt("goal", np.getValue()).commit();
                         preference.setSummary(getString(R.string.goal_summary, np.getValue()));
                         dialog.dismiss();
-                        getActivity().startService(new Intent(getActivity(), SensorListener.class)
+                        getContext().startService(new Intent(getContext(), SensorListener.class)
                                 .putExtra("updateNotificationState", true));
                     }
                 });
@@ -297,7 +297,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             File f = new File(Environment.getExternalStorageDirectory(), "Pedometer.csv");
             if (!f.exists() || !f.canRead()) {
-                new AlertDialog.Builder(getActivity())
+                new AlertDialog.Builder(getContext())
                         .setMessage(getString(R.string.file_cant_read, f.getAbsolutePath()))
                         .setPositiveButton(android.R.string.ok, new OnClickListener() {
                             @Override
@@ -307,7 +307,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                         }).create().show();
                 return;
             }
-            Database db = Database.getInstance(getActivity());
+            Database db = Database.getInstance(getContext());
             String line;
             String[] data;
             int ignored = 0, inserted = 0, overwritten = 0;

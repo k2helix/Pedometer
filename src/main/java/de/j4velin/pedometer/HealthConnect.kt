@@ -2,8 +2,6 @@ package de.j4velin.pedometer
 
 import android.content.Context
 import android.util.Log
-import android.view.View
-import android.widget.TextView
 import androidx.health.connect.client.HealthConnectClient
 import androidx.health.connect.client.permission.HealthPermission
 import androidx.health.connect.client.records.DistanceRecord

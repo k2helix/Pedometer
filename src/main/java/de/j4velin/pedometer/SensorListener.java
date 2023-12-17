@@ -109,9 +109,10 @@ public class SensorListener extends Service implements SensorEventListener {
             db.saveCurrentSteps(steps);
             db.close();
 
-            if (steps - lastSaveSteps < 10000) {
+            int hcSteps = steps - lastSaveSteps;
+            if (hcSteps > 0 && hcSteps < 10000) {
                 HealthConnect healthConnect = new HealthConnect();
-                healthConnect.saveStepsToHealthConnect(steps - lastSaveSteps + 1, lastSaveTime, System.currentTimeMillis(), this);
+                healthConnect.saveToHealthConnect(hcSteps, lastSaveTime, System.currentTimeMillis(), this);
             }
 
             lastSaveSteps = steps;

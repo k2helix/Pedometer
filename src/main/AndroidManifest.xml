@@ -3,8 +3,8 @@
     package="de.j4velin.pedometer"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:versionCode="1512"
-    android:versionName="1.5.12">
+    android:versionCode="1513"
+    android:versionName="1.5.13">
 
     <uses-sdk android:targetSdkVersion="26"/>
 

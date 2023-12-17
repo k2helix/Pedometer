@@ -28,7 +28,7 @@ android {
         buildToolsVersion rootProject.ext.buildToolsVersion
     } else {
         logger.warn('compileSdkVersion not found in rootProject')
-        compileSdkVersion = 34
+        compileSdkVersion 34
         buildToolsVersion = "27.0.3"
     }
 
